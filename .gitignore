@@ -10,6 +10,7 @@ win-unpacked/
 test_chunk.bin
 build/xray/*.zip
 build-tools/
+tools/
 
 # User data & caches
 .aura-browser/

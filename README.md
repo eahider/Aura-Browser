@@ -94,7 +94,7 @@
 
 ```bash
 # Клонирование репозитория
-git clone https://github.com/YOUR_USERNAME/aura-browser.git
+git clone https://github.com/eahider/aura-browser.git
 cd aura-browser
 
 # Установка зависимостей

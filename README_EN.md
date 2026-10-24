@@ -94,7 +94,7 @@ Prerequisites: [Node.js](https://nodejs.org/) (version 18 or newer):
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/aura-browser.git
+git clone https://github.com/eahider/aura-browser.git
 cd aura-browser
 
 # Install dependencies
