@@ -30,8 +30,8 @@ Official release binaries for Windows (x64):
 
 | Release | Package | Download Link |
 |---|---|---|
-| **v1.0.0** | **Windows Installer (.exe)** | [Download Aura Browser Setup 1.0.0.exe](dist/Aura%20Browser%20Setup%201.0.0.exe) |
-| **v1.0.0** | **Portable Unpacked** | Folder `dist/win-unpacked/Aura Browser.exe` |
+| **v1.0.0** | **Windows Installer (.exe)** | [📥 Download Aura Browser Setup 1.0.0.exe](https://github.com/eahider/Aura-Browser/releases/download/v1.0.0/Aura.Browser.Setup.1.0.0.exe) |
+| **v1.0.0** | **Release Page** | [📦 View Release v1.0.0 on GitHub](https://github.com/eahider/Aura-Browser/releases/tag/v1.0.0) |
 
 > [!TIP]
 > The standalone installer bundles an optimized Xray-core binary and all core runtime dependencies.

@@ -30,8 +30,8 @@
 
 | Версия | Тип | Ссылка |
 |---|---|---|
-| **v1.0.0** | **Установщик (Installer)** | [Скачать Aura Browser Setup 1.0.0.exe](dist/Aura%20Browser%20Setup%201.0.0.exe) |
-| **v1.0.0** | **Портативная версия (Portable)** | Папка `dist/win-unpacked/Aura Browser.exe` |
+| **v1.0.0** | **Установщик (Installer)** | [📥 Скачать Aura Browser Setup 1.0.0.exe](https://github.com/eahider/Aura-Browser/releases/download/v1.0.0/Aura.Browser.Setup.1.0.0.exe) |
+| **v1.0.0** | **Страница релиза** | [📦 Перейти к релизу v1.0.0 на GitHub](https://github.com/eahider/Aura-Browser/releases/tag/v1.0.0) |
 
 > [!TIP]
 > Инсталлятор весит ~130 МБ и включает встроенное ядро Xray-core и все необходимые библиотеки для автономной работы без интернета.
