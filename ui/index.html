@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aura Browser</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ================= TOP HEADER / SHELL ================= -->
+  <header id="browser-header">
+    <!-- Row 1: Brand, Tabs, RAM Saver Chip, Window Controls -->
+    <div class="titlebar-row">
+      <div class="browser-brand">
+        <svg class="brand-logo-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M12 3a9 9 0 0 1 9 9"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+        <span class="brand-name">Aura</span>
+      </div>
+
+      <!-- Tab Strip -->
+      <div class="tab-strip" id="tabStrip">
+        <!-- Tabs dynamically inserted here -->
+      </div>
+
+      <button class="btn-new-tab" id="btnNewTab" title="New Tab (Ctrl+T)" data-i18n-title="new_tab_title">+</button>
+
+      <div class="header-right">
+        <!-- Window Buttons -->
+        <div class="window-controls">
+          <button class="win-btn" id="btnWinMinimize" title="Minimize" data-i18n-title="minimize">&#x2014;</button>
+          <button class="win-btn" id="btnWinMaximize" title="Maximize" data-i18n-title="maximize">&#x25A2;</button>
+          <button class="win-btn close-btn" id="btnWinClose" title="Close" data-i18n-title="close">&#x2715;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2: Navigation & Omnibox -->
+    <div class="navbar-row">
+      <div class="nav-buttons">
+        <button class="nav-btn" id="btnBack" title="Back (Alt+Left)" data-i18n-title="back_title" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <button class="nav-btn" id="btnForward" title="Forward (Alt+Right)" data-i18n-title="forward_title" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+        <button class="nav-btn" id="btnReload" title="Reload (Ctrl+R)" data-i18n-title="reload_title">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+        </button>
+        <button class="nav-btn" id="btnHome" title="Home" data-i18n-title="home_title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        </button>
+      </div>
+
+      <!-- Omnibox (Search & URL) -->
+      <div class="omnibox-container" id="omniboxContainer">
+        <span class="search-engine-icon" id="searchEngineIcon" title="Search">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </span>
+        <input 
+          type="text" 
+          class="omnibox-input" 
+          id="omniboxInput" 
+          placeholder="Search the web or enter address..." 
+          data-i18n-placeholder="search_placeholder"
+          spellcheck="false"
+        />
+
+        <!-- Privacy Shield Pill -->
+        <div class="shield-pill" id="shieldPill" title="Privacy Shield" data-i18n-title="privacy_shield_title">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <span id="shieldBlockedCount">0</span>
+        </div>
+
+        <!-- Bookmark Star Button -->
+        <button class="btn-star" id="btnBookmarkStar" title="Bookmark this page (Ctrl+D)" data-i18n-title="bookmark_this_page">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        </button>
+      </div>
+
+      <!-- Right Action Tools -->
+      <div class="nav-actions">
+        <!-- Smart Circumvention Pill (YouTube / Discord / Telegram) - Inside Browser Only -->
+        <button class="bypass-pill" id="btnSmartBypass" title="Обход блокировок (YouTube, Discord, Telegram) - Только браузер" data-i18n-title="smart_bypass_title">
+          <span class="bypass-icon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+          </span>
+          <span class="bypass-dot" id="bypassIndicatorDot"></span>
+          <span id="bypassPillText" data-i18n="smart_bypass_btn">Обход: Выкл</span>
+        </button>
+
+        <!-- Built-in VPN / Tor Pill -->
+        <button class="vpn-status-pill" id="btnVpnToggle" title="VPN / Tor Shield" data-i18n-title="vpn_tor_button">
+          <span id="vpnPillIcon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          </span>
+          <span id="vpnPillText" data-i18n="vpn_tor_button">VPN / Tor</span>
+        </button>
+
+        <button class="action-btn" id="btnPasswords" title="Passwords & Logins Vault (Ctrl+Shift+L)" data-i18n-title="passwords_btn_title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-1.5 1.5L14 9l-3 3-2 2-3 3a4.24 4.24 0 0 1-6-6l3-3 2-2 3-3 3.5-3.5"></path><circle cx="7.5" cy="16.5" r="1.5"></circle></svg>
+        </button>
+        <button class="action-btn" id="btnBookmarks" title="Bookmarks (Ctrl+B)" data-i18n-title="bookmarks_btn_title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+        </button>
+        <button class="action-btn" id="btnHistory" title="History (Ctrl+H)" data-i18n-title="history_btn_title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        </button>
+        <button class="action-btn danger-action" id="btnClearData" title="Wipe Cookies, Cache & Telemetry in 1-click" data-i18n-title="clear_data_btn_title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+        </button>
+        <button class="action-btn" id="btnSettings" title="Settings" data-i18n-title="settings_btn_title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= WEBVIEW CONTAINER ================= -->
+  <main id="webview-container"></main>
+
+  <!-- ================= FLYOUT MODALS ================= -->
+
+  <!-- 1. Shield Flyout Modal -->
+  <div class="flyout-modal" id="shield-modal">
+    <div class="modal-header">
+      <div class="modal-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        <span data-i18n="shield_title">Aura Privacy Shield</span>
+      </div>
+      <button class="modal-close-btn" id="closeShieldModal">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="shield-stat-card">
+        <div>
+          <div class="shield-big-number" id="modalShieldCount">0</div>
+          <div class="shield-stat-label" data-i18n="trackers_blocked">Trackers & Telemetry Blocked</div>
+        </div>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+      </div>
+
+      <div class="switch-row">
+        <span data-i18n="block_trackers_toggle">Block Trackers & Ads</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="shieldToggleInput" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="switch-row">
+        <span data-i18n="strip_utm_toggle">Strip Tracking URL Params (UTM)</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="utmToggleInput" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div style="margin-top: 14px; font-weight: 600; font-size: 0.75rem; color: #94a3b8; letter-spacing: 0.05em;" data-i18n="blocked_on_page">
+        BLOCKED ON THIS PAGE
+      </div>
+      <div class="blocked-list" id="blockedListContainer">
+        <div style="color: #64748b; font-size: 0.8rem; text-align: center; padding: 10px;" data-i18n="no_trackers">
+          No trackers detected on this page
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Memory Saver Modal -->
+  <div class="flyout-modal" id="memory-modal">
+    <div class="modal-header">
+      <div class="modal-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        <span data-i18n="ram_title">RAM Optimizer</span>
+      </div>
+      <button class="modal-close-btn" id="closeMemoryModal">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="mem-stat-box">
+        <div class="mem-card">
+          <div class="mem-card-val" id="memSavedMb">0 MB</div>
+          <div class="mem-card-lbl" data-i18n="ram_saved_val">RAM Saved</div>
+        </div>
+        <div class="mem-card">
+          <div class="mem-card-val" id="memSleepingTabs">0</div>
+          <div class="mem-card-lbl" data-i18n="sleeping_tabs_val">Sleeping Tabs</div>
+        </div>
+      </div>
+
+      <div class="switch-row">
+        <span data-i18n="auto_sleep_text">Auto-sleep inactive tabs</span>
+        <span style="color: #38bdf8; font-weight: 600; font-size: 0.82rem;" data-i18n="after_5_min">After 5 min</span>
+      </div>
+
+      <button class="btn-hibernate-all" id="btnHibernateInactive" data-i18n="sleep_all_now_btn">
+        Hibernate Background Tabs Now
+      </button>
+    </div>
+  </div>
+
+  <!-- 3. Bookmarks Modal -->
+  <div class="flyout-modal" id="bookmarks-modal">
+    <div class="modal-header">
+      <div class="modal-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+        <span data-i18n="bookmarks_title">Bookmarks</span>
+      </div>
+      <button class="modal-close-btn" id="closeBookmarksModal">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div id="bookmarksList" style="display: flex; flex-direction: column; gap: 4px;"></div>
+    </div>
+  </div>
+
+  <!-- 4. History Modal -->
+  <div class="flyout-modal" id="history-modal">
+    <div class="modal-header">
+      <div class="modal-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        <span data-i18n="history_title">Browsing History</span>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button id="btnClearHistoryBtn" style="background: transparent; border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; border-radius: 6px; padding: 2px 8px; font-size: 0.75rem; cursor: pointer;" data-i18n="clear_history_btn">Clear</button>
+        <button class="modal-close-btn" id="closeHistoryModal">&times;</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div id="historyList" style="display: flex; flex-direction: column; gap: 4px;"></div>
+    </div>
+  </div>
+
+  <!-- 5. Settings Modal -->
+  <div class="flyout-modal" id="settings-modal">
+    <div class="modal-header">
+      <div class="modal-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        <span data-i18n="settings_title">Browser Settings</span>
+      </div>
+      <button class="modal-close-btn" id="closeSettingsModal">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div style="margin-bottom: 14px;">
+        <label style="display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 6px;" data-i18n="search_engine_label">Search Engine</label>
+        <select id="settingSearchEngine" style="width: 100%; background: #0c0e17; border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 8px; border-radius: 8px;">
+          <option value="duckduckgo">DuckDuckGo (Privacy)</option>
+          <option value="brave">Brave Search (Independent)</option>
+          <option value="google">Google</option>
+          <option value="yandex">Yandex</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom: 14px;">
+        <label style="display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 6px;" data-i18n="sleep_timeout_label">Tab Sleep Timeout</label>
+        <select id="settingSleepTimeout" style="width: 100%; background: #0c0e17; border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 8px; border-radius: 8px;">
+          <option value="2" data-i18n="sleep_2_min">2 minutes (Aggressive RAM save)</option>
+          <option value="5" data-i18n="sleep_5_min" selected>5 minutes (Recommended)</option>
+          <option value="15" data-i18n="sleep_15_min">15 minutes</option>
+          <option value="0" data-i18n="sleep_disabled">Disabled</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom: 14px;">
+        <label style="display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 6px;" data-i18n="language_label">Language / Язык интерфейса</label>
+        <select id="settingLanguage" style="width: 100%; background: #0c0e17; border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 8px; border-radius: 8px;">
+          <option value="ru" selected>Русский (Russian)</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom: 14px;">
+        <label style="display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 6px;" data-i18n="tor_startup_label">Tor Mode on Startup</label>
+        <select id="settingTorStartup" style="width: 100%; background: #0c0e17; border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 8px; border-radius: 8px;">
+          <option value="ask" data-i18n="tor_ask" selected>Ask on browser launch</option>
+          <option value="always" data-i18n="tor_always">Always launch in Tor mode</option>
+          <option value="never" data-i18n="tor_never">Standard mode (Tor disabled)</option>
+        </select>
+      </div>
+
+      <div class="switch-row">
+        <span data-i18n="clear_on_exit_label">Clear cache & cookies on exit</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="settingClearOnExit">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Find in Page Bar -->
+  <div id="find-bar">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    <input type="text" id="find-input" placeholder="Find in page...">
+    <span id="find-matches" style="font-size: 0.75rem; color: #94a3b8;"></span>
+    <button id="btnFindPrev" style="background: transparent; border: none; color: #fff; cursor: pointer;">▲</button>
+    <button id="btnFindNext" style="background: transparent; border: none; color: #fff; cursor: pointer;">▼</button>
+    <button id="btnFindClose" style="background: transparent; border: none; color: #64748b; cursor: pointer; font-size: 1.1rem;">&times;</button>
+  </div>
+
+  <!-- 7. Built-in VPN & Tor Modal -->
+  <div class="flyout-modal" id="vpn-modal">
+    <div class="modal-header">
+      <div class="modal-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+        <span data-i18n="vpn_modal_title">Aura VPN & Tor Shield</span>
+      </div>
+      <button class="modal-close-btn" id="closeVpnModal">&times;</button>
+    </div>
+    <div class="modal-body">
+      <!-- Status Card -->
+      <div class="vpn-status-card" id="vpnStatusCard">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div class="vpn-status-title" id="vpnCurrentStatus" data-i18n="vpn_direct_status">Direct (Unprotected)</div>
+          <div class="vpn-status-indicator" id="vpnIndicatorDot"></div>
+        </div>
+        <div class="vpn-ip-text" id="vpnCurrentIp">IP: Detecting...</div>
+      </div>
+
+      <!-- Mode Switcher -->
+      <div class="vpn-tab-buttons">
+        <button class="vpn-tab-btn active" id="tabBtnVpn" data-i18n="tab_vpn">VPN / Proxy</button>
+        <button class="vpn-tab-btn" id="tabBtnTor" data-i18n="tab_tor">Tor Network</button>
+      </div>
+
+      <!-- Routing Scope Selector (Browser only vs Whole PC) -->
+      <div class="vpn-scope-container">
+        <div class="vpn-scope-label" data-i18n="vpn_scope_label">Область действия:</div>
+        <div class="vpn-scope-btn-group">
+          <button type="button" class="scope-btn active" id="btnScopeBrowser" data-scope="browser">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <span data-i18n="scope_browser">Только браузер</span>
+          </button>
+          <button type="button" class="scope-btn" id="btnScopeSystem" data-scope="system">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            <span data-i18n="scope_system">Весь ПК (Система)</span>
+          </button>
+        </div>
+        <div class="vpn-scope-hint" id="vpnScopeHint" data-i18n="scope_browser_hint">
+          Прокси активен только внутри Aura Browser. Внешние программы ПК работают напрямую.
+        </div>
+      </div>
+
+      <!-- VPN Panel -->
+      <div id="panelVpn">
+        <!-- Incy-style Subscription Container -->
+        <div class="vpn-subscription-container">
+          <!-- Active Subscription Card (shown when subscription exists) -->
+          <div class="vpn-sub-card" id="vpnSubCard" style="display: none;">
+            <div class="vpn-sub-card-header">
+              <div class="vpn-sub-title-group">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg>
+                <span class="vpn-sub-name" id="vpnSubName">VPN Subscription</span>
+                <span class="vpn-sub-badge" id="vpnSubBadge">0 серверов</span>
+              </div>
+              <div class="vpn-sub-actions">
+                <button type="button" class="vpn-icon-btn" id="btnUpdateSubscription" data-i18n-title="btn_refresh_servers_title" title="Обновить подписку">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                </button>
+                <button type="button" class="vpn-icon-btn delete-btn" id="btnDeleteSubscription" title="Удалить подписку">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </button>
+              </div>
+            </div>
+            <div class="vpn-sub-meta" id="vpnSubMeta" style="display: none;">
+              <span class="sub-meta-pill" id="vpnSubTrafficTag">0 GB / ∞</span>
+              <span class="sub-meta-pill" id="vpnSubExpireTag">Осталось --</span>
+            </div>
+            <div class="vpn-sub-bottom-bar">
+              <span class="vpn-sub-updated" id="vpnSubUpdated">Обновлено: --</span>
+              <button type="button" class="btn-change-sub" id="btnChangeSub" data-i18n="add_another_subscription">+ Сменить подписку</button>
+            </div>
+          </div>
+
+          <!-- Add / Import Subscription Box -->
+          <div class="vpn-sub-box" id="subInputContainer">
+            <div class="vpn-sub-box-header">
+              <span style="font-size: 0.82rem; font-weight: 600; color: #fff;" data-i18n="add_subscription_btn">+ Добавить подписку на VPN</span>
+              <button type="button" id="btnToggleSubInput" class="btn-sub-cancel" style="display: none;">✕</button>
+            </div>
+            <div style="margin-top: 8px;">
+              <textarea id="subInputArea" class="vpn-sub-textarea" placeholder="Вставьте ссылку на подписку или VLESS / VMess / SS / SOCKS5..." data-i18n-placeholder="sub_input_placeholder"></textarea>
+              <button type="button" id="btnLoadSubscription" class="btn-load-sub" data-i18n="load_servers_btn">Загрузить серверы</button>
+            </div>
+          </div>
+
+          <!-- Device HWID Indicator -->
+          <div class="vpn-hwid-box" id="vpnHwidBox" style="margin-top: 10px; padding: 7px 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; font-size: 0.73rem; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
+            <div style="display: flex; align-items: center; gap: 6px; overflow: hidden; min-width: 0;">
+              <span style="color: #64748b; font-weight: 600; flex-shrink: 0;" title="Hardware ID для подписок с привязкой устройств (Happ, INCY, Remnawave)">HWID:</span>
+              <span id="vpnDeviceHwidVal" style="font-family: monospace; color: #94a3b8; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" title="Ваш аппаратный ID устройства. Используется для подписок с контролем устройств.">--</span>
+            </div>
+            <button type="button" id="btnCopyHwid" class="btn-sub-copy-hwid" style="background: none; border: 1px solid rgba(129, 140, 248, 0.3); color: #818cf8; cursor: pointer; font-size: 0.7rem; padding: 2px 8px; border-radius: 4px; flex-shrink: 0;" title="Скопировать HWID">Копировать</button>
+          </div>
+        </div>
+
+        <!-- Servers List Toolbar (like Incy) -->
+        <div class="vpn-servers-header">
+          <div class="vpn-servers-title">
+            <span data-i18n="servers_list_title">Серверы</span>
+            <span class="vpn-servers-count-badge" id="vpnServersCountTag">0</span>
+          </div>
+          <div class="vpn-servers-toolbar-actions">
+            <button type="button" class="vpn-toolbar-btn" id="btnPingServers" data-i18n-title="btn_ping_all_title" title="Замерить задержку до серверов">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              <span id="pingBtnText" data-i18n="btn_ping_all">Пинг</span>
+            </button>
+            <button type="button" class="vpn-toolbar-btn" id="btnRefreshServers" data-i18n-title="btn_refresh_servers_title" title="Обновить серверы из подписки">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              <span data-i18n="btn_refresh_servers">Обновить</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="vpn-servers-list" id="vpnServersList">
+          <!-- Dynamically populated servers from subscription -->
+        </div>
+
+        <div id="customProxySection" style="display: none; margin-top: 8px;">
+          <input type="text" id="customProxyInput" placeholder="socks5://127.0.0.1:1080 or http://..." style="width: 100%; background: #0c0e17; border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 6px 10px; border-radius: 8px; font-size: 0.8rem;">
+        </div>
+
+        <button class="btn-connect-vpn" id="btnConnectVpn" data-i18n="connect_vpn_btn">Connect VPN</button>
+      </div>
+
+      <!-- Tor Panel -->
+      <div id="panelTor" style="display: none;">
+        <div style="background: rgba(129, 140, 248, 0.08); border: 1px solid rgba(129, 140, 248, 0.2); padding: 10px; border-radius: 8px; margin-bottom: 12px; font-size: 0.8rem; line-height: 1.4; color: #c7d2fe;" data-i18n="tor_info">
+          <strong>Tor Onion Routing</strong> encapsulates traffic through 3 encrypted relays, eliminates WebRTC leaks and allows opening .onion sites.
+        </div>
+
+        <!-- Tor Bridges Card with @GetBridgesBot integration -->
+        <div class="tor-bridges-card">
+          <div class="tor-bridges-header">
+            <span style="font-size: 0.82rem; font-weight: 600; color: #fff;" data-i18n="tor_bridges_title">Tor Bridges (Circumvention)</span>
+          </div>
+
+          <!-- Telegram Bot Action Button -->
+          <button id="btnOpenGetBridgesBot" class="btn-telegram-bridges" type="button" data-i18n="tor_bridges_bot_btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            Get Bridges from @GetBridgesBot
+          </button>
+
+          <!-- Type Selector Pills (obfs4 / webtunnel) -->
+          <div class="bridge-type-tabs">
+            <button id="btnBridgeTypeObfs4" class="bridge-type-btn active" type="button" data-i18n="tor_btn_obfs4">obfs4 bridges</button>
+            <button id="btnBridgeTypeWebtunnel" class="bridge-type-btn" type="button" data-i18n="tor_btn_webtunnel">webtunnel bridges</button>
+          </div>
+
+          <!-- Bridge Input Textarea -->
+          <textarea id="torBridgesInput" class="tor-bridges-textarea" placeholder="Paste bridge lines from @GetBridgesBot (e.g. obfs4 192.0.2.1:443 ... or webtunnel ...)" data-i18n-placeholder="tor_bridges_placeholder"></textarea>
+
+          <div class="tor-bridge-row">
+            <label class="tor-bridge-checkbox">
+              <input type="checkbox" id="chkUseTorBridges" checked>
+              <span data-i18n="tor_use_bridges_label">Use bridges for connection</span>
+            </label>
+            <button id="btnSaveTorBridges" class="btn-save-bridges" type="button" data-i18n="tor_save_bridges_btn">Save Bridges</button>
+          </div>
+
+          <!-- Status indicator -->
+          <div class="tor-bridges-status-box" id="torBridgesStatusBox">
+            <span id="torBridgesStatusIcon" class="status-dot"></span>
+            <span id="torBridgesStatusText" data-i18n="tor_bridges_none">No bridges configured (direct connection)</span>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+          <div style="flex: 1;">
+            <label style="display: block; font-size: 0.78rem; color: #94a3b8; margin-bottom: 4px;" data-i18n="tor_port_label">Tor SOCKS5 Port</label>
+            <input type="number" id="torPortInput" value="9050" style="width: 100%; background: #0c0e17; border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 6px 10px; border-radius: 8px; font-size: 0.82rem;">
+          </div>
+          <div style="flex: 1; padding-top: 18px;">
+            <button id="btnCheckTorPort" style="width: 100%; padding: 7px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; color: #cbd5e1; font-size: 0.76rem; cursor: pointer;">Check Tor Status</button>
+          </div>
+        </div>
+
+        <button class="btn-connect-tor" id="btnConnectTor" data-i18n="connect_tor_btn">Connect via Tor</button>
+      </div>
+
+      <!-- Disconnect Button -->
+      <button class="btn-disconnect-proxy" id="btnDisconnectProxy" style="display: none; margin-top: 10px;" data-i18n="disconnect_btn">
+        Disconnect
+      </button>
+    </div>
+  </div>
+
+  <!-- 8. Startup Tor Modal -->
+  <div class="flyout-modal startup-modal" id="startup-tor-modal">
+    <div class="modal-header">
+      <div class="modal-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M12 3a9 9 0 0 1 9 9"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        <span data-i18n="launch_tor_title">Tor Private Mode</span>
+      </div>
+      <button class="modal-close-btn" id="closeStartupTorModal">&times;</button>
+    </div>
+    <div class="modal-body" style="text-align: center; padding: 22px 18px;">
+      <div style="display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 16px; background: rgba(99, 102, 241, 0.12); border: 1px solid rgba(99, 102, 241, 0.25); margin-bottom: 14px;">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M12 3a9 9 0 0 1 9 9"></path><circle cx="12" cy="12" r="3"></circle></svg>
+      </div>
+      <div style="font-weight: 700; font-size: 1.15rem; color: #fff; margin-bottom: 8px;" data-i18n="launch_tor_question">Launch in Tor Mode?</div>
+      <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 22px; line-height: 1.5;" data-i18n="launch_tor_desc">
+        Route all traffic through encrypted Onion relays with full WebRTC leak prevention and access to .onion sites.
+      </div>
+      <div style="display: flex; gap: 10px; justify-content: center;">
+        <button id="btnStartupEnableTor" style="background: var(--accent-primary); color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;" data-i18n="enable_tor_btn">
+          Enable Tor
+        </button>
+        <button id="btnStartupNormal" style="background: rgba(255,255,255,0.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15); padding: 10px 18px; border-radius: 8px; font-weight: 500; cursor: pointer;" data-i18n="continue_normal_btn">
+          Continue Standard
+        </button>
+      </div>
+      <div style="margin-top: 16px; font-size: 0.78rem; color: #64748b;">
+        <label style="cursor: pointer;"><input type="checkbox" id="chkStartupRemember"> <span data-i18n="remember_choice">Remember my choice</span></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. Password Save Floating Prompt Banner -->
+  <div id="password-save-banner" class="password-banner">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2"><path d="M21 2l-2 2m-1.5 1.5L14 9l-3 3-2 2-3 3a4.24 4.24 0 0 1-6-6l3-3 2-2 3-3 3.5-3.5"></path><circle cx="7.5" cy="16.5" r="1.5"></circle></svg>
+      <div>
+        <div style="font-weight: 600; font-size: 0.85rem; color: #fff;"><span data-i18n="save_password_prompt">Save password for</span> <span id="pwdPromptDomain" style="color: #818cf8;"></span>?</div>
+        <div style="font-size: 0.75rem; color: #94a3b8;" id="pwdPromptUser"></div>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <button id="btnSavePasswordConfirm" class="btn-pwd-save" data-i18n="save_btn">Save</button>
+      <button id="btnSavePasswordDismiss" class="btn-pwd-dismiss" data-i18n="dismiss_btn">Dismiss</button>
+    </div>
+  </div>
+
+  <!-- 10. Passwords Manager Modal -->
+  <div class="flyout-modal" id="passwords-modal">
+    <div class="modal-header">
+      <div class="modal-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2"><path d="M21 2l-2 2m-1.5 1.5L14 9l-3 3-2 2-3 3a4.24 4.24 0 0 1-6-6l3-3 2-2 3-3 3.5-3.5"></path><circle cx="7.5" cy="16.5" r="1.5"></circle></svg>
+        <span data-i18n="passwords_title">Saved Passwords & Logins</span>
+      </div>
+      <button class="modal-close-btn" id="closePasswordsModal">&times;</button>
+    </div>
+    <div class="modal-body">
+      <input type="text" id="passwordsSearchInput" placeholder="Search saved logins..." data-i18n-placeholder="passwords_search" style="width: 100%; background: #0c0e17; border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 8px 12px; border-radius: 8px; font-size: 0.82rem; margin-bottom: 12px;">
+      <div id="passwordsList" style="display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow-y: auto;">
+        <!-- Dynamically populated credentials -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 11. Smart Bypass Flyout Modal -->
+  <div class="flyout-modal" id="bypass-modal">
+    <div class="modal-header">
+      <div class="modal-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        <span data-i18n="bypass_modal_title">Встроенный обход блокировок</span>
+      </div>
+      <button class="modal-close-btn" id="closeBypassModal">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="bypass-status-card" id="bypassStatusCard">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <div style="font-weight: 600; font-size: 0.88rem; color: #fff;" id="bypassStatusTitle" data-i18n="bypass_inactive">Обход: Не активен</div>
+            <div style="font-size: 0.73rem; color: #94a3b8; margin-top: 2px;" data-i18n="bypass_scope_label">Режим: Только внутри браузера</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="bypassMasterToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div style="font-size: 0.75rem; font-weight: 600; color: #94a3b8; margin: 14px 0 8px 0; letter-spacing: 0.05em;" data-i18n="bypass_services_title">
+        РАЗБЛОКИРОВАННЫЕ СЕРВИСЫ
+      </div>
+
+      <div class="bypass-services-list">
+        <div class="bypass-service-item">
+          <div class="service-meta">
+            <span class="service-dot active"></span>
+            <span class="service-name">YouTube</span>
+          </div>
+          <span class="service-badge">No-QUIC + Proxy</span>
+        </div>
+        <div class="bypass-service-item">
+          <div class="service-meta">
+            <span class="service-dot active"></span>
+            <span class="service-name">Discord (Web & Voice)</span>
+          </div>
+          <span class="service-badge">Gateway Relay</span>
+        </div>
+        <div class="bypass-service-item">
+          <div class="service-meta">
+            <span class="service-dot active"></span>
+            <span class="service-name">Telegram Web</span>
+          </div>
+          <span class="service-badge">Direct Tunnel</span>
+        </div>
+        <div class="bypass-service-item">
+          <div class="service-meta">
+            <span class="service-dot active"></span>
+            <span class="service-name">X (Twitter) & Instagram</span>
+          </div>
+          <span class="service-badge">PAC Split</span>
+        </div>
+      </div>
+
+      <div class="bypass-direct-note">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" style="flex-shrink: 0;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <span data-i18n="bypass_direct_text">Банки, Госуслуги, VK и Яндекс работают напрямую на максимальной скорости.</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="i18n.js"></script>
+  <script src="renderer.js"></script>
+</body>
+</html>

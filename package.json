@@ -1,0 +1,87 @@
+{
+  "name": "aura-browser",
+  "version": "1.0.0",
+  "description": "Ultra-minimalist, memory-efficient privacy desktop browser with built-in VPN & Tor",
+  "main": "main.js",
+  "author": "Aura",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --win nsis",
+    "mobile:build": "node scripts/buildMobile.js",
+    "mobile:build:apk": "powershell -ExecutionPolicy Bypass -File scripts/buildAndroid.ps1",
+    "mobile:sync": "npm run mobile:build && npx cap sync",
+    "mobile:open:android": "npx cap open android",
+    "mobile:open:ios": "npx cap open ios",
+    "mobile:serve": "node scripts/serveMobile.js"
+  },
+  "build": {
+    "appId": "com.aurabrowser.app",
+    "productName": "Aura Browser",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "privacyFilter.js",
+      "memoryManager.js",
+      "storage.js",
+      "vpnManager.js",
+      "dpiEngine.js",
+      "xrayCore.js",
+      "subscriptionParser.js",
+      "passwordManager.js",
+      "contextMenu.js",
+      "build/icon.ico",
+      "build/icon.png",
+      "build/xray/**/*",
+      "ui/**/*",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "build/xray/**/*"
+    ],
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Aura Browser"
+    }
+  },
+  "keywords": [
+    "browser",
+    "privacy",
+    "minimalist",
+    "lightweight",
+    "vpn",
+    "tor"
+  ],
+  "devDependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/cli": "^8.5.3",
+    "@capacitor/core": "^8.5.3",
+    "@capacitor/ios": "^8.5.3",
+    "@capacitor/preferences": "^8.0.1",
+    "@capacitor/splash-screen": "^8.0.2",
+    "@capacitor/status-bar": "^8.0.4",
+    "electron": "^45.0.0",
+    "electron-builder": "^26.18.0"
+  }
+}

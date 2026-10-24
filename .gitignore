@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+package-lock.json.bak
+
+# Build outputs & installers (GitHub limits files to 100MB; upload dist/*.exe to GitHub Releases!)
+dist/
+win-unpacked/
+*.exe
+*.blockmap
+test_chunk.bin
+build/xray/*.zip
+build-tools/
+
+# User data & caches
+.aura-browser/
+browser_data/
+*.log
+
+# Mobile build artifacts
+android/.gradle/
+android/build/
+android/app/build/
+android/app/.cxx/
+android/local.properties
+android/.idea/
+ios/App/App/build/
+ios/App/Pods/
+ios/App/Podfile.lock
+ios/App/DerivedData/
+.gradle/
+*.apk
+*.aab
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# IDE / Editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Temporary patch folders
+aura_patch_temp/
